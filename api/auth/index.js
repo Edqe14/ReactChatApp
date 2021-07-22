@@ -20,7 +20,14 @@ const post = async (req, res) => {
       isOnline: false,
     });
 
-    await newUser.save();
+    try {
+      await newUser.validate();
+      await newUser.save();
+    } catch (e) {
+      return res
+        .status(400)
+        .json({ message: 'Error when validating user', stack: e.message });
+    }
   }
 
   return res.json({ message: 'OK', userID });

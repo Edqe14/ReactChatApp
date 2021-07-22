@@ -11,4 +11,15 @@
 
 body {
   font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+}
+
+.markdown blockquote {
+  border-left: 3px #fefefe solid;
+  border-radius: 2px;
+  padding-left: 0.5rem;
+}
+
+.markdown.self blockquote {
+  border-color: #0e0e0e;
 }

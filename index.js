@@ -25,7 +25,7 @@ const io = require('socket.io')(server, {
 
 const socketHandler = require('./socket/index.js');
 
-io.on('connection', socketHandler);
+io.on('connection', socketHandler.bind(this, io));
 
 app.use(cors('*'));
 app.use(express.json());

@@ -6,11 +6,9 @@ import { fetchUser } from '../../components/QueryFunctions';
 import { useAlert } from 'react-alert';
 import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router-dom';
-import { useQuery } from 'react-query';
 
 export default function Landing() {
   const [cookies] = useCookies(['userID']);
-  const { isLoading, data } = useQuery('user', () => fetchUser(cookies.userID));
   const history = useHistory();
   const alert = useAlert();
 
@@ -18,11 +16,23 @@ export default function Landing() {
 
   const [animate, setAnimate] = useState(false);
   const [room, setRoom] = useState('');
+  const [user, setUser] = useState({});
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     const timeout = setTimeout(() => setAnimate(true), 1500);
     return () => clearTimeout(timeout);
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    Promise.resolve().then(async () => {
+      const fUser = await fetchUser(cookies.userID);
+      setUser(fUser);
+      setLoading(false);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const joinRoom = (e) => {
     e.preventDefault();
@@ -48,10 +58,11 @@ export default function Landing() {
               'transition duration-500 ease-in-out',
               'text-7xl mb-16',
               animate && 'text-6xl transform -translate-y-36 scale-75',
+              !animate && 'pointer-events-none',
             ].join(' ')}
           >
             Welcome,{' '}
-            <span className='font-medium text-pink'>{data.username}</span>
+            <span className='font-medium text-pink'>{user.username}</span>
           </h1>
 
           <div

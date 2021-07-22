@@ -1,11 +1,14 @@
+import Chat from '../../components/Chat';
 import Landing from './landing';
 import { useParams } from 'react-router-dom';
+import useSocket from '../../connection/useSocket';
 
-export default function Room({ login }) {
+export default function Room({ login, user }) {
   const { id } = useParams();
-  if (id === 'landing') return <Landing login={login} />;
+  const socket = useSocket();
 
-  // TODO socket & layout
+  socket.emit('room', { roomID: id, userID: user });
 
-  return <h1>{id}</h1>;
+  if (!id || id === 'landing') return <Landing login={login} />;
+  return <Chat id={id} user={user} />;
 }
