@@ -47,9 +47,10 @@ function App() {
 
   useEffect(() => {
     Promise.resolve().then(() => {
-      if (location.pathname === '/') return;
-      if (!cookies.userID) return history.push('/');
-      login();
+      if (!cookies.userID) {
+        if (location.pathname === '/') return;
+        return history.push('/');
+      } else login();
     });
   });
 

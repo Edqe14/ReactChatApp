@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cross-env PORT=3001 nodemon --ignore './frontend/' index.js",
-    "start": "npm run build:client && node index.js",
+    "start": "cross-env PORT=3001 node index.js",
     "build:client": "cd frontend && npm run build"
   },
   "repository": {

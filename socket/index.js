@@ -21,7 +21,7 @@ const handler = (io, socket) => {
     await setRoom(io, _id ?? userID, roomID, socket);
   });
 
-  socket.on('message', (message) => {
+  socket.on('message', async (message) => {
     if (!socket.user) socket.user = await User.findById(message.userID).exec();
 
     io.sockets.in(socket.room).emit('user:message', message);
