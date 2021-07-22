@@ -1,6 +1,5 @@
 import './styles/global.css';
 import { Provider as AlertProvider, positions, transitions } from 'react-alert';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import {
   Redirect,
   Route,
@@ -16,8 +15,6 @@ import { axios } from './components/QueryFunctions';
 import { useCookies } from 'react-cookie';
 import { useEffect } from 'react';
 import useSocket from './connection/useSocket';
-
-const queryClient = new QueryClient();
 
 function App() {
   const [cookies, , removeCookie] = useCookies();
@@ -64,21 +61,19 @@ function App() {
       transitions={transitions.SCALE}
       offset='10px'
     >
-      <QueryClientProvider client={queryClient}>
-        <Switch>
-          <Route exact path='/'>
-            <Home login={login} />
-          </Route>
+      <Switch>
+        <Route exact path='/'>
+          <Home login={login} />
+        </Route>
 
-          <Route exact path='/room'>
-            <Redirect to='/room/landing' />
-          </Route>
+        <Route exact path='/room'>
+          <Redirect to='/room/landing' />
+        </Route>
 
-          <Route path='/room/:id'>
-            <Room login={login} user={cookies.userID} />
-          </Route>
-        </Switch>
-      </QueryClientProvider>
+        <Route path='/room/:id'>
+          <Room login={login} user={cookies.userID} />
+        </Route>
+      </Switch>
     </AlertProvider>
   );
 }
