@@ -1,8 +1,8 @@
+import { fetchRooms, fetchUser } from '../../components/QueryFunctions';
 import { useEffect, useState } from 'react';
 import BaseContainer from '../../components/BaseContainer';
 import Button from '../../components/Button';
 import Field from '../../components/Field';
-import { fetchUser } from '../../components/QueryFunctions';
 import { useAlert } from 'react-alert';
 import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router-dom';
@@ -18,6 +18,7 @@ export default function Landing() {
   const [room, setRoom] = useState('');
   const [user, setUser] = useState({});
   const [isLoading, setLoading] = useState(true);
+  const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
     const timeout = setTimeout(() => setAnimate(true), 1500);
@@ -27,8 +28,13 @@ export default function Landing() {
 
   useEffect(() => {
     Promise.resolve().then(async () => {
-      const fUser = await fetchUser(cookies.userID);
+      const [fUser, fRooms] = await Promise.all([
+        fetchUser(cookies.userID),
+        fetchRooms(),
+      ]);
+
       setUser(fUser);
+      setRooms(fRooms);
       setLoading(false);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -46,6 +52,11 @@ export default function Landing() {
   const updateRoom = (e) => {
     const value = (e?.target?.value ?? '').replace(/ /gi, '-');
     setRoom(value);
+  };
+
+  const randomRoom = () => {
+    const rand = rooms[Math.floor(Math.random() * rooms.length)];
+    history.push(`/room/${rand}`);
   };
 
   return (
@@ -71,7 +82,7 @@ export default function Landing() {
               !animate && 'opacity-0',
             ].join(' ')}
           >
-            <form onSubmit={joinRoom} className='w-96'>
+            <form onSubmit={joinRoom} className='w-96 flex flex-col'>
               <Field
                 name='room'
                 title='Room ID'
@@ -79,7 +90,8 @@ export default function Landing() {
                 onChange={updateRoom}
               />
 
-              <div className='flex items-center justify-end'>
+              <div className='flex justify-between items-center'>
+                <Button text='Random' onClick={randomRoom} />
                 <Button text='Join' type='submit' />
               </div>
             </form>

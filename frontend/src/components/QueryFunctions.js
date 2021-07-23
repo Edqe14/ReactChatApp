@@ -11,5 +11,7 @@ export const fetchUser = (id) =>
 export const fetchRoom = (id) =>
   axios.get(`/room/${id}`).then((res) => res.data);
 
+export const fetchRooms = () => axios.get(`/room/`).then((res) => res.data);
+
 export const fetchRoomUsers = (id) =>
   axios.get(`/room/${id}/users`).then((res) => res.data);

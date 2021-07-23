@@ -2,7 +2,7 @@ const Room = require('../../models/room.js');
 const newRoom = require('../../utils/createRoom.js');
 
 const get = async (req, res) => {
-  const all = await Room.find({});
+  const all = await Room.find({ _id: { $not: /landing/ } });
   return res.json(all.map((r) => r._id));
 };
 
